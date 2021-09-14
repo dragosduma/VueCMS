@@ -11,32 +11,28 @@
           <span class="text-h5">Employee Profile</span>
         </v-card-title>
         <v-card-text>
-          <v-form>
+          <v-form ref="form">
             <v-container>
               <v-row>
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field
                     label="First name*"
                     v-model="fname"
-                    required
+                    :rules="inputRules"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field
                     label="Last name*"
                     v-model="lname"
-                    required
+                    :rules="inputRules"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field label="Email*" required></v-text-field>
+                  <v-text-field label="Email*"></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-select
-                    label="Sex*"
-                    :items="['Male', 'Female']"
-                    required
-                  ></v-select>
+                  <v-select label="Sex*" :items="['Male', 'Female']"></v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -54,7 +50,7 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                       v-model="date"
-                      label="Picker in menu"
+                      label="Birthday"
                       prepend-icon="mdi-calendar"
                       readonly
                       v-bind="attrs"
@@ -81,7 +77,7 @@
           <v-btn color="blue darken-1" text @click="dialog = false">
             Close
           </v-btn>
-          <v-btn color="blue darken-1" text @click="submit(), dialog = false">
+          <v-btn color="blue darken-1" text @click="submit()">
             Save
           </v-btn>
         </v-card-actions>
@@ -102,13 +98,15 @@ export default {
         .toISOString()
         .substr(0, 10),
       menu: false,
-      modal: false,
-      menu2: false,
+      inputRules: [(v) => v.length >= 3 || "Minimum length is 3 characters"],
     };
   },
   methods: {
     submit() {
-      console.log(this.fname, this.lname);
+      if (this.$refs.form.validate()) {
+        console.log(this.fname, this.lname);
+        this.dialog=false;
+      }
     },
   },
 };

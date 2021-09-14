@@ -11,28 +11,39 @@
           <span class="text-h5">Employee Profile</span>
         </v-card-title>
         <v-card-text>
-          <v-form ref="form">
+          <v-form ref="form" v-model="valid" lazy-validation>
             <v-container>
               <v-row>
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field
                     label="First name*"
                     v-model="fname"
-                    :rules="inputRules"
+                    :rules="nameRules"
+                    required
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field
                     label="Last name*"
                     v-model="lname"
-                    :rules="inputRules"
+                    :rules="nameRules"
+                    required
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field label="Email*"></v-text-field>
+                  <v-text-field
+                    label="Email*"
+                    :rules="emailRules"
+                    required
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-select label="Sex*" :items="['Male', 'Female']"></v-select>
+                  <v-select
+                    label="Sex*"
+                    :items="['Male', 'Female']"
+                    :rules="[(v) => !!v || 'Item is required']"
+                    required
+                  ></v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -98,15 +109,37 @@ export default {
         .toISOString()
         .substr(0, 10),
       menu: false,
-      inputRules: [(v) => v.length >= 3 || "Minimum length is 3 characters"],
+      valid: true,
+      name: "",
+      nameRules: [
+        (v) => !!v || "Name is required",
+        (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
+      ],
+      email: "",
+      emailRules: [
+        (v) => !!v || "E-mail is required",
+        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+      ],
+      select: null,
+      items: ["Item 1", "Item 2", "Item 3", "Item 4"],
+      checkbox: false,
     };
   },
   methods: {
     submit() {
       if (this.$refs.form.validate()) {
         console.log(this.fname, this.lname);
-        this.dialog=false;
+        this.dialog = false;
       }
+    },
+    validate() {
+      this.$refs.form.validate();
+    },
+    reset() {
+      this.$refs.form.reset();
+    },
+    resetValidation() {
+      this.$refs.form.resetValidation();
     },
   },
 };

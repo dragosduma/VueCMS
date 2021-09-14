@@ -33,6 +33,7 @@
                 <v-col cols="12">
                   <v-text-field
                     label="Email*"
+                    v-model="email"
                     :rules="emailRules"
                     required
                   ></v-text-field>
@@ -40,6 +41,7 @@
                 <v-col cols="12">
                   <v-select
                     label="Sex*"
+                    v-model="sex"
                     :items="['Male', 'Female']"
                     :rules="[(v) => !!v || 'Item is required']"
                     required
@@ -98,11 +100,13 @@
 </template>
 
 <script>
+import db from '@/firebase.js'
 export default {
   data() {
     return {
       fname: "",
       lname: "",
+      sex: "",
       due: null,
       dialog: false,
       date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
@@ -128,7 +132,15 @@ export default {
   methods: {
     submit() {
       if (this.$refs.form.validate()) {
-        console.log(this.fname, this.lname);
+        const user = {
+            fname: this.fname,
+            lname: this.lname,
+            email: this.email,
+            sex: this.sex,
+            date: this.date,
+        }
+
+        db.collection('users').add(user);
         this.dialog = false;
       }
     },

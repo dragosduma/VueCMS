@@ -1,14 +1,18 @@
 <template>
   <div>
-    <vuetify-datatable :posts="posts"></vuetify-datatable>
+    <Popup />
+    <vuetify-datatable :posts="posts"></vuetify-datatable>    
   </div>
 </template>
 
 <script>
+import Popup from "./components/Popup";
 import VuetifyDatatable from "./components/VuetifyDatatable";
+
 export default {
   name: "App",
   components: {
+    Popup,
     VuetifyDatatable,
   },
 

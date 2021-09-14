@@ -35,16 +35,17 @@
 </template>
 
 <script>
+import db from '@/firebase'
 export default {
   props: ["posts"],
   data: () => ({
     search: "",
     headers: [
-      { text: "First Name", value: "firstName" },
-      { text: "Last Name", value: "lastName" },
+      { text: "First Name", value: "fname" },
+      { text: "Last Name", value: "lname" },
       { text: "Email", value: "email"},
       { text: "Sex", value: "sex"},
-      { text: "Birthday", value: "birthday"},
+      { text: "Birthday", value: "date"},
       { text: "Actions", value: "actions", sortable: false},
     ],
   }),
@@ -54,5 +55,18 @@ export default {
       this.posts.splice(index, 1);
     },
   },
+  created() {
+    db.collection('users').onSnapshot(res => { 
+      const changes = res.docChanges();
+
+      changes.forEach(change => {
+        if(change.type === 'added') {
+          this.posts.push({
+            ...change.doc.data()
+          })
+        }
+      })
+    })
+  }
 };
 </script>

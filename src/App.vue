@@ -19,11 +19,11 @@ export default {
   data: () => ({
     posts: [
       {
-        lastName:"Duma",
-        firstName:"Dragos",
+        lname:"Duma",
+        fname:"Dragos",
         email:"dragos.duma@gmail.com",
         sex:"male",
-        birthday:"2000-21-02"
+        date:"2000-21-02"
       },
     ],
   }),

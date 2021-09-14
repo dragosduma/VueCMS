@@ -90,7 +90,12 @@
           <v-btn color="blue darken-1" text @click="dialog = false">
             Close
           </v-btn>
-          <v-btn color="blue darken-1" text @click="submit()">
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="submit()"
+            :loading="loading"
+          >
             Save
           </v-btn>
         </v-card-actions>
@@ -100,7 +105,7 @@
 </template>
 
 <script>
-import db from '@/firebase.js'
+import db from "@/firebase.js";
 export default {
   data() {
     return {
@@ -125,23 +130,27 @@ export default {
         (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
       ],
       select: null,
-      items: ["Item 1", "Item 2", "Item 3", "Item 4"],
-      checkbox: false,
+      loading: false,
     };
   },
   methods: {
     submit() {
       if (this.$refs.form.validate()) {
+        this.loading = true;
         const user = {
-            fname: this.fname,
-            lname: this.lname,
-            email: this.email,
-            sex: this.sex,
-            date: this.date,
-        }
+          fname: this.fname,
+          lname: this.lname,
+          email: this.email,
+          sex: this.sex,
+          date: this.date,
+        };
 
-        db.collection('users').add(user);
-        this.dialog = false;
+        db.collection("users")
+          .add(user)
+          .then(() => {
+            this.loading = false;
+            this.dialog = false;
+          });
       }
     },
     validate() {

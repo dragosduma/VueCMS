@@ -23,8 +23,8 @@
               :search="search"
               class="elevation-1"
             >
-              <template v-slot:item.actions="{ item }">
-                <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+              <template v-slot:item.actions="{ posts }">
+                <v-icon small @click="deleteItem(posts)">mdi-delete</v-icon>
               </template>
             </v-data-table>
           </v-col>
@@ -35,17 +35,16 @@
 </template>
 
 <script>
-import db from '@/firebase'
 export default {
   props: ["posts"],
   data: () => ({
     search: "",
     headers: [
-      { text: "First Name", value: "fname" },
-      { text: "Last Name", value: "lname" },
+      { text: "Name", value: "name" },
+      { text: "Username", value: "username" },
       { text: "Email", value: "email"},
-      { text: "Sex", value: "sex"},
-      { text: "Birthday", value: "date"},
+      { text: "Street", value: "address.street"},
+      { text: "City", value: "address.city"},
       { text: "Actions", value: "actions", sortable: false},
     ],
   }),
@@ -53,20 +52,8 @@ export default {
     deleteItem(item) {
       const index = this.posts.indexOf((x) => x.id === item.id);
       this.posts.splice(index, 1);
+
     },
   },
-  created() {
-    db.collection('users').onSnapshot(res => { 
-      const changes = res.docChanges();
-
-      changes.forEach(change => {
-        if(change.type === 'added') {
-          this.posts.push({
-            ...change.doc.data()
-          })
-        }
-      })
-    })
-  }
 };
 </script>

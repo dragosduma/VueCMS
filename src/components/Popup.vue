@@ -105,13 +105,16 @@
 </template>
 
 <script>
-import db from "@/firebase.js";
+import axios from "axios";
+
 export default {
   data() {
     return {
       fname: "",
       lname: "",
       sex: "",
+      email: "",
+      select: null,
       due: null,
       dialog: false,
       date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
@@ -124,12 +127,10 @@ export default {
         (v) => !!v || "Name is required",
         (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
       ],
-      email: "",
       emailRules: [
         (v) => !!v || "E-mail is required",
         (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
       ],
-      select: null,
       loading: false,
     };
   },
@@ -145,12 +146,10 @@ export default {
           date: this.date,
         };
 
-        db.collection("users")
-          .add(user)
-          .then(() => {
-            this.loading = false;
-            this.dialog = false;
-          });
+        axios
+          .post("https://jsonplaceholder.typicode.com/users", user)
+          .then((response) => console.log(response), this.dialog=false, this.loading=false)
+          .catch((error) => console.log(error));
       }
     },
     validate() {

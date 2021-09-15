@@ -1,7 +1,7 @@
 <template>
   <div>
     <Popup />
-    <vuetify-datatable :posts="posts"></vuetify-datatable>    
+    <vuetify-datatable :posts="posts"></vuetify-datatable>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 <script>
 import Popup from "./components/Popup";
 import VuetifyDatatable from "./components/VuetifyDatatable";
-window.axios = require('axios');
+window.axios = require("axios");
 
 export default {
   name: "App",
@@ -19,11 +19,14 @@ export default {
   },
 
   data: () => ({
-    posts: [],
+    posts: [
+
+    ],
   }),
   mounted: function() {
-    axios.get("https://jsonplaceholder.typicode.com/users")
-    .then(response => this.posts = response.data);
- }
+    axios
+      .get("https://jsonplaceholder.typicode.com/users")
+      .then((response) => (this.posts = response.data));
+  },
 };
 </script>

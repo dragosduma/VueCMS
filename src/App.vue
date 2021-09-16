@@ -25,7 +25,7 @@ export default {
   }),
   mounted: function() {
     axios
-      .get("https://jsonplaceholder.typicode.com/users")
+      .get("https://localhost:44348/api/employees")
       .then((response) => (this.posts = response.data));
   },
 };

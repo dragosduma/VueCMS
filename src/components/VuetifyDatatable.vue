@@ -23,8 +23,8 @@
               :search="search"
               class="elevation-1"
             >
-              <template v-slot:item.actions="{ posts }">
-                <v-icon small @click="deleteItem(posts)">mdi-delete</v-icon>
+              <template v-slot:item.actions="{ item }">
+                <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
               </template>
             </v-data-table>
           </v-col>
@@ -35,24 +35,34 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   props: ["posts"],
   data: () => ({
     search: "",
     headers: [
-      { text: "Name", value: "name" },
-      { text: "Username", value: "username" },
-      { text: "Email", value: "email"},
-      { text: "Street", value: "address.street"},
-      { text: "City", value: "address.city"},
-      { text: "Actions", value: "actions", sortable: false},
+      { text: "Last Name", value: "FirstName" },
+      { text: "First Name", value: "LastName" },
+      { text: "Email", value: "Email" },
+      { text: "Sex", value: "Sex" },
+      { text: "Birthday", value: "Birthday" },
+      { text: "Actions", value: "actions", sortable: false },
     ],
   }),
   methods: {
     deleteItem(item) {
-      const index = this.posts.indexOf((x) => x.id === item.id);
-      this.posts.splice(index, 1);
-
+      let id = item.id;
+      let idx = this.posts.findIndex((item) => item.id === id);
+      if (confirm("Are you sure you want to delete this?")) {
+        axios
+          .delete(
+            `https://localhost:44348/api/employees/${id}` 
+          )
+          .then((response) => {
+            this.posts.splice(idx, 1);
+            return response;
+          });
+      }
     },
   },
 };

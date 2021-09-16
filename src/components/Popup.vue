@@ -17,7 +17,7 @@
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field
                     label="First name*"
-                    v-model="fname"
+                    v-model="firstName"
                     :rules="nameRules"
                     required
                   ></v-text-field>
@@ -25,7 +25,7 @@
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field
                     label="Last name*"
-                    v-model="lname"
+                    v-model="lastName"
                     :rules="nameRules"
                     required
                   ></v-text-field>
@@ -110,8 +110,8 @@ import axios from "axios";
 export default {
   data() {
     return {
-      fname: "",
-      lname: "",
+      firstName: "",
+      lastName: "",
       sex: "",
       email: "",
       select: null,
@@ -120,6 +120,7 @@ export default {
       date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
         .toISOString()
         .substr(0, 10),
+      birthday: "",
       menu: false,
       valid: true,
       name: "",
@@ -139,16 +140,20 @@ export default {
       if (this.$refs.form.validate()) {
         this.loading = true;
         const user = {
-          fname: this.fname,
-          lname: this.lname,
-          email: this.email,
-          sex: this.sex,
-          date: this.date,
+          FirstName: this.firstName,
+          LastName: this.lastName,
+          Email: this.email,
+          Sex: this.sex,
+          Birthday: this.date,
         };
 
         axios
-          .post("https://jsonplaceholder.typicode.com/users", user)
-          .then((response) => console.log(response), this.dialog=false, this.loading=false)
+          .post("https://localhost:44348/api/employees", user)
+          .then(
+            (response) => console.log(response),
+            (this.dialog = false),
+            (this.loading = false)
+          )
           .catch((error) => console.log(error));
       }
     },

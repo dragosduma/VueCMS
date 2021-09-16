@@ -17,6 +17,7 @@
         <v-row>
           <v-col>
             <v-data-table
+              :v-model="posts.id"
               :headers="headers"
               :items="posts"
               :items-per-page="5"
@@ -40,6 +41,7 @@ export default {
   props: ["posts"],
   data: () => ({
     search: "",
+    deleted: "",
     headers: [
       { text: "Last Name", value: "FirstName" },
       { text: "First Name", value: "LastName" },
@@ -50,14 +52,14 @@ export default {
     ],
   }),
   methods: {
-    deleteItem(item) {
-      let id = item.id;
-      let idx = this.posts.findIndex((item) => item.id === id);
+    deleteItem(posts) {
+      console.log(posts);
+      let id = posts.ID;
+      let idx = this.posts.findIndex((item) => item.ID === id);
       if (confirm("Are you sure you want to delete this?")) {
+      console.log(id);
         axios
-          .delete(
-            `https://localhost:44348/api/employees/${id}` 
-          )
+          .delete(`https://localhost:44348/api/employees/${id}`)
           .then((response) => {
             this.posts.splice(idx, 1);
             return response;

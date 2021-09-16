@@ -20,7 +20,9 @@ export default {
 
   data: () => ({
     posts: [
-
+      {
+        id:""
+      }
     ],
   }),
   mounted: function() {
